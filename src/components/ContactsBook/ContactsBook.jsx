@@ -18,19 +18,6 @@ export const ContactsBook = () => {
 
   const normalizeStr = string => string.trim().toLowerCase();
 
-  const findContact = value =>
-    contacts.find(
-      contact => normalizeStr(contact.name) === normalizeStr(value)
-    );
-
-  const submitForm = data => {
-    if (findContact(data.name)) {
-      alert(`${data.name} is already to contacts`);
-      return;
-    }
-    setContacts(prevContacts => [...prevContacts, { ...data, id: nanoid() }]);
-  };
-
   const handleChangeFilter = e => setFilter(e.target.value);
 
   const getFilteredContacts = value => {
@@ -49,7 +36,7 @@ export const ContactsBook = () => {
   return (
     <Container>
       <Title>Phonebook</Title>
-      <ContactForm onSubmit={submitForm} />
+      <ContactForm />
 
       <TitleContacts>Contacts</TitleContacts>
       <ContactsWrapper>
