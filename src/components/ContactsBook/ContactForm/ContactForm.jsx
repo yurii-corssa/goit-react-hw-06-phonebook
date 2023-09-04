@@ -6,12 +6,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getContacts } from 'redux/selectors';
 import { addContact } from 'redux/contactsSlice';
 import { nanoid } from '@reduxjs/toolkit';
+import { normalizeStr } from 'utils/normalizeStr';
 
 export const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
-
   const contacts = useSelector(getContacts);
+  const idName = nanoid();
+  const idNumber = nanoid();
 
   const dispatch = useDispatch();
 
@@ -32,32 +34,26 @@ export const ContactForm = () => {
     }
   };
 
-  const resetForm = () => {
+  const formReset = () => {
     setName('');
     setNumber('');
   };
 
-  const normalizeStr = string => string.trim().toLowerCase();
-
-  const findContact = value =>
-    contacts.find(
-      contact => normalizeStr(contact.name) === normalizeStr(value)
-    );
+  const isContact = value =>
+    contacts.find(({ name }) => normalizeStr(name) === normalizeStr(value));
 
   const submitForm = e => {
     e.preventDefault();
 
-    if (findContact(name)) {
+    if (isContact(name)) {
       alert(`${name} is already to contacts`);
       return;
     }
+
     dispatch(addContact(name, number));
 
-    resetForm();
+    formReset();
   };
-
-  const idName = nanoid();
-  const idNumber = nanoid();
 
   return (
     <Form onSubmit={submitForm}>
